@@ -1,0 +1,8 @@
+build:
+  - npm install
+  - composer install
+web:
+  command: php app/Server.php
+  port: 9000
+  console: true
+test: mocha tests/* --recursive
