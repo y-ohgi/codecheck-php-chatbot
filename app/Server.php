@@ -24,9 +24,6 @@ class Chat implements MessageComponentInterface
     {
         // store new connection in clients
         $this->clients->attach($conn);
-        printf("New connection: %s\n", $conn->resourceId);
-        // send a welcome message to the client that just connected
-        $conn->send(json_encode(array('type' => 'message', 'text' => 'Welcome to the test chat app!')));
     }
 
     public function onClose(ConnectionInterface $conn)
@@ -49,6 +46,27 @@ class Chat implements MessageComponentInterface
         foreach ($this->clients as $client) {
             $client->send(json_encode(['data' => $message]));
         }
+
+        $str = explode(" ", $message);
+        if($str[0] === "bot" && count($str) === 3){ // && length
+            $data = array(
+                "command" => $str[1],
+                "data" => $str[2]
+            );
+
+            var_dump($data);
+            $bot = new Bot($data);
+            $bot->generateHash();
+            $bot->hash;
+            
+            foreach ($this->clients as $client) {
+                $client->send(json_encode(['data' => $bot->hash]));
+            }
+
+            var_dump($bot->hash);
+        }
+        
+        
     }
 }
     /* protected $clients = array(); */
